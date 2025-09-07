@@ -38,11 +38,11 @@ body {
   letter-spacing: 0.02em;
 }
 input.form-input {
-  color: black;
+  color: white;
 }
 
 input.form-input:focus {
-  color: black;
+  color: white;
 }
 .account-area {
   display: flex;

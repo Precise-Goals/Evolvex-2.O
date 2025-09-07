@@ -1,18 +1,22 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = { 
-  apiKey: "AIzaSyAy6yZ57_CBJuykKI68s53TVq14OzvamMU",
-  authDomain: "evolvex-2c7d7.firebaseapp.com",
-  databaseURL: "https://evolvex-2c7d7-default-rtdb.firebaseio.com",
-  projectId: "evolvex-2c7d7",
-  storageBucket: "evolvex-2c7d7.firebasestorage.app",
-  messagingSenderId: "287465961401",
-  appId: "1:287465961401:web:0269fcbac215fd317fa868",
-  measurementId: "G-MWWS90DGPR",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-export const auth = getAuth(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+export { app, auth, db, analytics };

@@ -1,5 +1,8 @@
 import React from "react";
 import Evo from "./Evo";
+import TopProjects from "./TopProjects";
+import { DocumentationLanding } from "./DocumentationLanding";
+
 
 export const Hero = () => {
   return (
@@ -7,6 +10,8 @@ export const Hero = () => {
       <div className="wrao">
         <Evo />
       </div>
+      <TopProjects />
+      <DocumentationLanding />
     </div>
   );
 };

@@ -397,8 +397,8 @@ img.mrktan {
 }
 
 .lplt h2 {
-  font-size: 49.44px;
-  line-height: 100%;
+  font-size: 30px;
+  line-height: 130%;
   font-weight: 800;
   text-transform: capitalize;
 }
@@ -691,4 +691,94 @@ form.i {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-} 
+}
+h4.MuiTypography-root.MuiTypography-h4.MuiTypography-gutterBottom.css-1it4a80-MuiTypography-root {
+  font-weight: 200;
+  font-family: "Poppins";
+}
+
+.topic-selector {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  flex-direction: column;
+}
+button.topic-button {
+  font-size: 15px;
+  padding: 3% 6%;
+  border-radius: 5rem;
+  border: 1px solid black;
+  background: transparent;
+  color: black;
+}
+.digva {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.topic-selector {
+  justify-content: center;
+  width: 85%;
+  align-items: center;
+  flex-direction: column;
+}
+
+.topic-selector div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
+button.topic-button {
+  cursor: pointer;
+  margin: 1% 0;
+  padding: 1.5% 2%;
+  transition: all ease 0.2s;
+}
+button.topic-button:hover {
+  background: black;
+  color: white;
+  border: 1px solid black;
+}
+h4.MuiTypography-root.MuiTypography-h4.css-f84ov1-MuiTypography-root {
+  font-family: "Poppins";
+  font-weight: 200;
+}
+.digva {
+  width: 100%;
+}
+
+.topic-selector div {
+  width: 100%;
+}
+.user-info {
+  display: flex;
+  gap: 0.5em;
+}
+
+button.logout-button-class {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 9%;
+  background: black;
+  border: 1px solid black;
+  color: white;
+  border-radius: 5rem;
+  font-size: 20px;
+}
+
+.user-info {
+  position: absolute;
+  right: -37%;
+}
+
+.user-info a {
+  background: black;
+  padding: 7% 15%;
+  border-radius: 4rem;
+}

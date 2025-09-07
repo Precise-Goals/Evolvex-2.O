@@ -1,61 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../App"; // Adjust path as needed
 import { useNavigate } from "react-router-dom";
 import sorc from "../assets/trends.png";
 
 export const Login = () => {
-  const [error, setError] = useState(""); // Handle errors
-  const { login, user } = useAuth(); // Assuming useAuth also provides the current user
+  const [error, setError] = useState("");
+  const { login, user } = useAuth();
   const navigate = useNavigate();
 
-  // Function to check if Petra Wallet is installed
-  const getAptosWallet = () => {
-    if ("aptos" in window) {
-      return window.aptos;
-    } else {
-      window.open("https://petra.app/", "_blank");
-      return null;
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/");
     }
-  };
+  }, [user, navigate]);
 
-  // Main handler for the connect button
   const handleConnect = async () => {
-    setError(""); // Reset error state
-    const wallet = getAptosWallet();
+    setError(""); // Reset any previous errors
 
-    if (!wallet) {
-      setError("Petra Wallet not found. Please install it.");
+    // 1. Check if the Petra wallet object exists on the window
+    if (!window.aptos) {
+      setError("Petra Wallet not found. Please install the extension.");
+      // Optionally, redirect to the Petra website
+      window.open("https://petra.app/", "_blank");
       return;
     }
 
     try {
-      // The connect() method returns the wallet's public key and address
-      const response = await wallet.connect();
+      // 2. Connect to the wallet
+      await window.aptos.connect();
+      
+      // 3. Get the user's account information
+      const account = await window.aptos.account();
 
-      // The user's Aptos address
-      const userAddress = response.address;
-
-      // Create a user data object
+      // 4. Structure the user data and call your login function
       const userData = {
-        address: userAddress,
-        publicKey: response.publicKey,
+        address: account.address,
+        publicKey: account.publicKey,
+        wallet: "Petra", // Manually set the wallet name
       };
 
-      // Call the login function from context to update app state
       login(userData);
-      navigate("/"); // Redirect to home page after successful connection
+      navigate("/"); // Redirect on successful login
+
     } catch (err) {
-      // Handles wallet connection errors (e.g., user rejects the request)
-      setError(err.message || "Failed to connect wallet. Please try again.");
+      // Handle errors, such as the user rejecting the connection
+      console.error("Wallet connection error:", err);
+      if (err.code === 4001) { // EIP-1193 user rejected request error
+        setError("Connection request rejected by user.");
+      } else {
+        setError("Failed to connect wallet. Please try again.");
+      }
     }
   };
-
-  // If the user is already logged in, you can redirect them or show a different UI
-  useEffect(() => {
-    if (user) {
-      navigate("/"); // Redirect if already logged in
-    }
-  }, [user, navigate]);
 
   return (
     <div className="login-container">
@@ -64,7 +61,7 @@ export const Login = () => {
           <span>EVOLVEX</span> <br /> CONNECT WALLET
         </h2>
 
-        {/* The new "Connect Wallet" button */}
+        {/* This button now triggers our manual connection logic */}
         <button
           type="button"
           onClick={handleConnect}
@@ -73,7 +70,6 @@ export const Login = () => {
           Connect Petra Wallet
         </button>
 
-        {/* Display error message if any */}
         {error && <p style={{ color: "red", marginTop: "15px" }}>{error}</p>}
 
         <p style={{ marginTop: "20px", fontSize: "0.8rem", color: "gray" }}>

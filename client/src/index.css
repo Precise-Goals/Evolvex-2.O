@@ -5,6 +5,11 @@
   src: url(./assets/horizon.otf);
 }
 
+:root{
+  --w-c: #ffffff;
+  --b-c: #000000;
+}
+
 * {
   margin: 0;
   box-sizing: border-box;
@@ -22,7 +27,9 @@ input:focus-visible,input:focus {
   stroke: none;
 }
 input{
+  /* filter: invert(1); */
   color: var(--w-c);
+  background-color: #000000;
 }
 #root {
   background-color: var(--w-c);

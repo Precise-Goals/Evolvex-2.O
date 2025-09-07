@@ -10,7 +10,6 @@ import "./App.css";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { File404 } from "./components/File404";
-import { Code } from "./components/Code";
 import { UnderDev } from "./components/UnderDev";
 import { Hero } from "./components/Hero";
 import { CiVolumeHigh, CiVolumeMute } from "react-icons/ci";
@@ -19,11 +18,16 @@ import { Documentation } from "./components/Documentation";
 import { Login } from "./components/Login";
 import { Trend } from "./containers/Trend";
 import { Blog } from "./containers/Blog";
-import { Rag } from "./containers/Rag";
 import BlockFree from "./components/Block";
+import Developer from "./components/Developer";
+// import Verifier from "./components/Verifier";
+import Library from "./components/Library";
+import AptosVerifier from "./components/Verifier";
+import EnhancedAptosVerifier from "./components/AptosVerifier";
 
 // Create an Auth Context
 const AuthContext = React.createContext();
+const WalletContext = React.createContext();
 
 function App() {
   const [isMuted, setIsMuted] = useState(true);
@@ -34,7 +38,23 @@ function App() {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData)); // Persist user data
   };
+  const [walletAddr, setWalletAddr] = useState(null);
 
+  const connectWallet = async () => {
+    if (!window.aptos) return alert("Install Petra wallet");
+    try {
+      const res = await window.aptos.connect();
+      setWalletAddr(res.address);
+    } catch (error) {
+      console.error("Failed to connect wallet:", error);
+    }
+  };
+  const disconnectWallet = async () => {
+    if (window.aptos) {
+      await window.aptos.disconnect();
+      setWalletAddr(null);
+    }
+  };
   // Function to handle logout
   const logout = () => {
     setUser(null);
@@ -97,72 +117,73 @@ function App() {
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
-      <BackgroundSound />
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/evolvex-signin" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Hero />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/evolvex-blockchain"
-            element={
-              <ProtectedRoute>
-                <BlockFree />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/evolvex-code-agentic-ai"
-            element={
-              <ProtectedRoute>
-                <Code />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/evolvex-creative-agentic-ai"
-            element={
-              <ProtectedRoute>
-                <UnderDev />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/evolvex-student-agentic-ai"
-            element={
-              <ProtectedRoute>
-                <UnderDev />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/evolvex-business-agentic-ai"
-            element={
-              <ProtectedRoute>
-                <Trend />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/blog/:id" element={<Blog />} />
-          <Route
-            path="/evolvex-documentation"
-            element={
-              <ProtectedRoute>
-                <Documentation />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<File404 />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+      <WalletContext.Provider
+        value={{ walletAddr, connectWallet, disconnectWallet }}
+      >
+        {" "}
+        <BackgroundSound />
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path="/evolvex-signin" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Hero />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/evolvex-blockchain"
+              element={
+                <ProtectedRoute>
+                  <BlockFree />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/evolvex-creative-agentic-ai"
+              element={
+                <ProtectedRoute>
+                  <UnderDev />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/evolvex-student-agentic-ai"
+              element={
+                <ProtectedRoute>
+                  <UnderDev />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/business"
+              element={
+                <ProtectedRoute>
+                  <Trend />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/library/:id" element={<Library />} />
+            <Route path="/blog/:id" element={<Blog />} />
+            <Route
+              path="/evolvex-documentation"
+              element={
+                <ProtectedRoute>
+                  <Documentation />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/developer" element={<Developer />} />
+            <Route path="/verifier" element={<EnhancedAptosVerifier />} />
+            <Route path="*" element={<File404 />} />
+          </Routes>
+          <Footer />
+        </BrowserRouter>
+      </WalletContext.Provider>
     </AuthContext.Provider>
   );
 }
@@ -170,5 +191,7 @@ function App() {
 // Custom hook to use auth context
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => React.useContext(AuthContext);
+// eslint-disable-next-line react-refresh/only-export-components
+export const useWallet = () => React.useContext(WalletContext); 
 
 export default App;
